@@ -1,3 +1,4 @@
+// Updated
 import React, { useState, useRef } from 'react';
 import { Camera, FileText, Users, DollarSign, Eye, Edit3, Check, Clock, Package, Mail, Calendar, Star, Gift, UserPlus, Settings, Send, Download, Phone, MapPin, Zap, ExternalLink } from 'lucide-react';
 
