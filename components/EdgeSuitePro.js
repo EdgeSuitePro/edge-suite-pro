@@ -24,12 +24,16 @@ import {
   Layers,
   User,
   Home,
-  Scissors
+  Scissors,
+  Phone,
+  Mail
 } from 'lucide-react'
 
 export default function EdgeSuitePro() {
   const [currentView, setCurrentView] = useState('dashboard')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [currentDate, setCurrentDate] = useState(new Date())
   
   const currentUser = {
     name: 'John Smith',
@@ -95,6 +99,43 @@ export default function EdgeSuitePro() {
     }
   ]
 
+  // Sample appointments data
+  const appointments = [
+    {
+      id: 'APT-001',
+      customer: 'Mario Rodriguez',
+      service: 'Standard Sharpening',
+      date: '2024-08-22',
+      time: '10:00 AM',
+      duration: 30,
+      status: 'confirmed',
+      notes: '3 kitchen knives',
+      phone: '(555) 123-4567'
+    },
+    {
+      id: 'APT-002',
+      customer: 'Sarah Chen',
+      service: 'Premium Package',
+      date: '2024-08-22',
+      time: '2:00 PM',
+      duration: 60,
+      status: 'confirmed',
+      notes: 'Restaurant chef - 5 knives + repair',
+      phone: '(555) 987-6543'
+    },
+    {
+      id: 'APT-003',
+      customer: 'Mike Thompson',
+      service: 'Consultation',
+      date: '2024-08-23',
+      time: '9:00 AM',
+      duration: 15,
+      status: 'pending',
+      notes: 'First time customer',
+      phone: '(555) 456-7890'
+    }
+  ]
+
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'orders', label: 'Orders', icon: Package },
@@ -122,8 +163,217 @@ export default function EdgeSuitePro() {
     return colors[status] || 'bg-gray-100 text-gray-800'
   }
 
+  const getAppointmentColor = (status) => {
+    const colors = {
+      confirmed: 'bg-green-100 border-green-500 text-green-800',
+      pending: 'bg-yellow-100 border-yellow-500 text-yellow-800',
+      completed: 'bg-blue-100 border-blue-500 text-blue-800',
+      cancelled: 'bg-red-100 border-red-500 text-red-800'
+    }
+    return colors[status] || 'bg-gray-100 border-gray-500 text-gray-800'
+  }
+
+  // Get appointments for selected date
+  const getAppointmentsForDate = (date) => {
+    const dateStr = date.toISOString().split('T')[0]
+    return appointments.filter(apt => apt.date === dateStr)
+  }
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  // Calendar View Component
+  const CalendarView = () => {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Calendar & Appointments</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <div className="flex rounded-lg border">
+              {['month', 'week', 'day'].map((type) => (
+                <button
+                  key={type}
+                  className={`px-4 py-2 text-sm font-medium capitalize ${
+                    type === 'month'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-gray-700 hover:bg-gray-50'
+                  } ${type === 'month' ? 'rounded-l-lg' : type === 'day' ? 'rounded-r-lg' : ''}`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Plus size={20} />
+              <span>New Appointment</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Calendar Navigation */}
+        <div className="bg-white p-4 rounded-lg shadow-sm border">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">
+              {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            </h2>
+            <div className="flex space-x-2">
+              <button 
+                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                ←
+              </button>
+              <button 
+                onClick={() => setCurrentDate(new Date())}
+                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg"
+              >
+                Today
+              </button>
+              <button 
+                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
+          {/* Mini Calendar Grid */}
+          <div className="grid grid-cols-7 gap-1">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
+                {day}
+              </div>
+            ))}
+            {Array.from({ length: 35 }, (_, i) => {
+              const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i - 6)
+              const isCurrentMonth = date.getMonth() === currentDate.getMonth()
+              const isToday = date.toDateString() === new Date().toDateString()
+              const hasAppointments = getAppointmentsForDate(date).length > 0
+              
+              return (
+                <button
+                  key={i}
+                  onClick={() => setSelectedDate(date)}
+                  className={`p-2 text-sm rounded-lg relative ${
+                    isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
+                  } ${
+                    isToday ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
+                  } ${
+                    selectedDate.toDateString() === date.toDateString() && !isToday
+                      ? 'bg-blue-100 text-blue-700'
+                      : ''
+                  }`}
+                >
+                  {date.getDate()}
+                  {hasAppointments && (
+                    <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></div>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Appointments for Selected Date */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">
+              Appointments for {selectedDate.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </h3>
+          </div>
+          <div className="divide-y">
+            {getAppointmentsForDate(selectedDate).length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                <Calendar size={48} className="mx-auto mb-3 text-gray-300" />
+                <p>No appointments scheduled for this date</p>
+                <button className="mt-3 text-blue-600 hover:text-blue-700 text-sm">
+                  Schedule an appointment
+                </button>
+              </div>
+            ) : (
+              getAppointmentsForDate(selectedDate).map((appointment) => (
+                <div key={appointment.id} className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <div className="font-semibold text-lg">{appointment.time}</div>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium border-l-4 ${getAppointmentColor(appointment.status)}`}>
+                          {appointment.status}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-medium">{appointment.customer}</div>
+                        <div className="text-sm text-gray-600">{appointment.service}</div>
+                        <div className="text-sm text-gray-600">Duration: {appointment.duration} minutes</div>
+                        {appointment.notes && (
+                          <div className="text-sm text-gray-600">Notes: {appointment.notes}</div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex space-x-2 ml-4">
+                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <Phone size={18} />
+                      </button>
+                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <Edit size={18} />
+                      </button>
+                      <button className="p-2 text-green-600 hover:bg-green-50 rounded-lg">
+                        <CheckCircle size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center space-x-3">
+              <Clock className="text-blue-600" size={24} />
+              <div>
+                <div className="font-semibold">Today's Schedule</div>
+                <div className="text-sm text-gray-600">
+                  {getAppointmentsForDate(new Date()).length} appointments
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center space-x-3">
+              <AlertCircle className="text-yellow-600" size={24} />
+              <div>
+                <div className="font-semibold">Pending Confirmations</div>
+                <div className="text-sm text-gray-600">
+                  {appointments.filter(apt => apt.status === 'pending').length} pending
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center space-x-3">
+              <Calendar className="text-green-600" size={24} />
+              <div>
+                <div className="font-semibold">This Week</div>
+                <div className="text-sm text-gray-600">
+                  {appointments.length} total appointments
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const DashboardView = () => (
@@ -387,6 +637,8 @@ export default function EdgeSuitePro() {
         return <OrdersView />
       case 'customers':
         return <CustomersView />
+      case 'calendar':
+        return <CalendarView />
       default:
         return (
           <div className="text-center py-12">
