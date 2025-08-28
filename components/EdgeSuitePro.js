@@ -99,7 +99,145 @@ export default function EdgeSuitePro() {
     }
   ]
 
-  // Sample appointments data
+  // Sample invoices data
+  const invoices = [
+    {
+      id: 'INV-001',
+      orderId: 'ORD-001',
+      customer: 'Mario Rodriguez',
+      amount: 45.00,
+      status: 'paid',
+      dueDate: '2024-08-22',
+      paidDate: '2024-08-20',
+      services: [
+        { name: 'Standard Sharpening', quantity: 3, rate: 15.00, total: 45.00 }
+      ]
+    },
+    {
+      id: 'INV-002',
+      orderId: 'ORD-002',
+      customer: 'Sarah Chen',
+      amount: 85.00,
+      status: 'pending',
+      dueDate: '2024-08-25',
+      paidDate: null,
+      services: [
+        { name: 'Premium Sharpening', quantity: 5, rate: 12.00, total: 60.00 },
+        { name: 'Handle Repair', quantity: 1, rate: 25.00, total: 25.00 }
+      ]
+    },
+    {
+      id: 'INV-003',
+      orderId: 'ORD-003',
+      customer: 'Restaurant Depot',
+      amount: 180.00,
+      status: 'overdue',
+      dueDate: '2024-08-18',
+      paidDate: null,
+      services: [
+        { name: 'Commercial Package', quantity: 12, rate: 15.00, total: 180.00 }
+      ]
+    }
+  ]
+
+  // Sample loyalty data
+  const loyaltyStats = {
+    totalMembers: 1247,
+    activeMembers: 892,
+    pointsIssued: 45230,
+    rewardsRedeemed: 156,
+    avgPointsPerCustomer: 385
+  }
+
+  const loyaltyTiers = [
+    {
+      name: 'Bronze',
+      minPoints: 0,
+      benefits: ['5% discount', 'Birthday reward', 'Priority booking'],
+      members: 654,
+      color: 'text-orange-600 bg-orange-100'
+    },
+    {
+      name: 'Silver',
+      minPoints: 500,
+      benefits: ['10% discount', 'Free sharpening every 10th visit', 'Express service'],
+      members: 425,
+      color: 'text-gray-600 bg-gray-100'
+    },
+    {
+      name: 'Gold',
+      minPoints: 1000,
+      benefits: ['15% discount', 'Free pickup/delivery', 'VIP support', 'Exclusive offers'],
+      members: 168,
+      color: 'text-yellow-600 bg-yellow-100'
+    }
+  ]
+
+  const recentActivity = [
+    {
+      id: 1,
+      customer: 'Mario Rodriguez',
+      action: 'Points Earned',
+      points: 45,
+      description: 'Order #ORD-001 completed',
+      date: '2024-08-22'
+    },
+    {
+      id: 2,
+      customer: 'Sarah Chen',
+      action: 'Reward Redeemed',
+      points: -100,
+      description: 'Free sharpening service',
+      date: '2024-08-21'
+    },
+    {
+      id: 3,
+      customer: 'Mike Thompson',
+      action: 'Tier Upgraded',
+      points: 0,
+      description: 'Upgraded to Silver tier',
+      date: '2024-08-20'
+    }
+  ]
+
+  const referrals = [
+    {
+      id: 'REF-001',
+      referrer: 'Sarah Chen',
+      referred: 'Mike Thompson',
+      status: 'completed',
+      reward: 50,
+      date: '2024-08-18'
+    },
+    {
+      id: 'REF-002',
+      referrer: 'Mario Rodriguez',
+      referred: 'Lisa Wang',
+      status: 'pending',
+      reward: 50,
+      date: '2024-08-20'
+    }
+  ]
+  const paymentMethods = [
+    {
+      id: 'PM-001',
+      type: 'Credit Card',
+      details: '**** 4242',
+      customer: 'Mario Rodriguez',
+      amount: 45.00,
+      date: '2024-08-20',
+      status: 'completed'
+    },
+    {
+      id: 'PM-002',
+      type: 'Cash',
+      details: 'In-person payment',
+      customer: 'Local Customer',
+      amount: 30.00,
+      date: '2024-08-21',
+      status: 'completed'
+    }
+  ]
   const appointments = [
     {
       id: 'APT-001',
@@ -173,7 +311,529 @@ export default function EdgeSuitePro() {
     return colors[status] || 'bg-gray-100 border-gray-500 text-gray-800'
   }
 
-  // Get appointments for selected date
+  // Loyalty View Component
+  const LoyaltyView = () => {
+    const [activeTab, setActiveTab] = useState('program')
+
+    const ProgramOverviewTab = () => (
+      <div className="space-y-6">
+        {/* Loyalty Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Total Members</div>
+            <div className="text-2xl font-bold text-blue-600">{loyaltyStats.totalMembers}</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Active Members</div>
+            <div className="text-2xl font-bold text-green-600">{loyaltyStats.activeMembers}</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Points Issued</div>
+            <div className="text-2xl font-bold text-purple-600">{loyaltyStats.pointsIssued.toLocaleString()}</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Rewards Redeemed</div>
+            <div className="text-2xl font-bold text-orange-600">{loyaltyStats.rewardsRedeemed}</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Avg Points</div>
+            <div className="text-2xl font-bold text-gray-900">{loyaltyStats.avgPointsPerCustomer}</div>
+          </div>
+        </div>
+
+        {/* Loyalty Tiers */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Loyalty Tiers</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+            {loyaltyTiers.map((tier) => (
+              <div key={tier.name} className="border rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${tier.color}`}>
+                    <Star size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold">{tier.name}</h4>
+                    <p className="text-sm text-gray-600">{tier.minPoints}+ points</p>
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <div className="text-sm font-medium text-gray-700 mb-2">Benefits:</div>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    {tier.benefits.map((benefit, index) => (
+                      <li key={index} className="flex items-center">
+                        <CheckCircle size={16} className="text-green-500 mr-2" />
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900">{tier.members}</div>
+                    <div className="text-sm text-gray-600">members</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Recent Loyalty Activity</h3>
+          </div>
+          <div className="divide-y">
+            {recentActivity.map((activity) => (
+              <div key={activity.id} className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      activity.action === 'Points Earned' ? 'bg-green-100' :
+                      activity.action === 'Reward Redeemed' ? 'bg-red-100' : 'bg-blue-100'
+                    }`}>
+                      {activity.action === 'Points Earned' ? (
+                        <Plus className={activity.points > 0 ? 'text-green-600' : 'text-red-600'} size={20} />
+                      ) : activity.action === 'Reward Redeemed' ? (
+                        <Gift className="text-red-600" size={20} />
+                      ) : (
+                        <Star className="text-blue-600" size={20} />
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-medium">{activity.customer}</div>
+                      <div className="text-sm text-gray-600">{activity.description}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className={`font-bold ${
+                      activity.points > 0 ? 'text-green-600' : activity.points < 0 ? 'text-red-600' : 'text-blue-600'
+                    }`}>
+                      {activity.points > 0 ? '+' : ''}{activity.points !== 0 ? activity.points : activity.action}
+                    </div>
+                    <div className="text-sm text-gray-500">{activity.date}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+
+    const ReferralsTab = () => (
+      <div className="space-y-6">
+        {/* Referral Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Total Referrals</div>
+            <div className="text-2xl font-bold text-blue-600">{referrals.length}</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Completed</div>
+            <div className="text-2xl font-bold text-green-600">
+              {referrals.filter(r => r.status === 'completed').length}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Pending</div>
+            <div className="text-2xl font-bold text-yellow-600">
+              {referrals.filter(r => r.status === 'pending').length}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Rewards Paid</div>
+            <div className="text-2xl font-bold text-green-600">
+              ${referrals.filter(r => r.status === 'completed').reduce((sum, r) => sum + r.reward, 0)}
+            </div>
+          </div>
+        </div>
+
+        {/* Referrals List */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Referral History</h3>
+          </div>
+          <div className="divide-y">
+            {referrals.map((referral) => (
+              <div key={referral.id} className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Users className="text-blue-600" size={20} />
+                    </div>
+                    <div>
+                      <div className="font-medium">{referral.referrer}</div>
+                      <div className="text-sm text-gray-600">referred {referral.referred}</div>
+                      <div className="text-xs text-gray-500">{referral.date}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      referral.status === 'completed' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {referral.status}
+                    </span>
+                    <div className="text-right">
+                      <div className="font-bold text-green-600">${referral.reward}</div>
+                      <div className="text-xs text-gray-500">reward</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Referral Program Setup */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Referral Program Settings</h3>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Referrer Reward
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="number"
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="50"
+                  />
+                  <span className="text-gray-600">points</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  New Customer Reward
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="number"
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="25"
+                  />
+                  <span className="text-gray-600">points</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                Update Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Loyalty & Referrals</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Gift size={20} />
+              <span>Award Points</span>
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Users size={20} />
+              <span>Track Referral</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          {[
+            { id: 'program', label: 'Loyalty Program', icon: Star },
+            { id: 'referrals', label: 'Referrals', icon: Users }
+          ].map((tab) => {
+            const Icon = tab.icon
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'program' && <ProgramOverviewTab />}
+        {activeTab === 'referrals' && <ReferralsTab />}
+      </div>
+    )
+  }
+    const colors = {
+      paid: 'bg-green-100 text-green-800',
+      pending: 'bg-yellow-100 text-yellow-800',
+      overdue: 'bg-red-100 text-red-800',
+      draft: 'bg-gray-100 text-gray-800'
+    }
+    return colors[status] || 'bg-gray-100 text-gray-800'
+  }
+
+  // Payments View Component
+  const PaymentsView = () => {
+    const [activeTab, setActiveTab] = useState('invoices')
+
+    const InvoicesTab = () => (
+      <div className="space-y-6">
+        {/* Invoices Overview Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Total Outstanding</div>
+            <div className="text-2xl font-bold text-red-600">$265</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Paid This Month</div>
+            <div className="text-2xl font-bold text-green-600">$1,240</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Pending Invoices</div>
+            <div className="text-2xl font-bold text-yellow-600">2</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Average Payment</div>
+            <div className="text-2xl font-bold text-gray-900">$76</div>
+          </div>
+        </div>
+
+        {/* Invoices List */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Invoices</h3>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                <Plus size={20} />
+                <span>New Invoice</span>
+              </button>
+            </div>
+          </div>
+          <div className="divide-y">
+            {invoices.map((invoice) => (
+              <div key={invoice.id} className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <div className="font-semibold">{invoice.id}</div>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getInvoiceStatusColor(invoice.status)}`}>
+                        {invoice.status}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <div><strong>Customer:</strong> {invoice.customer}</div>
+                      <div><strong>Order:</strong> {invoice.orderId}</div>
+                      <div><strong>Due:</strong> {invoice.dueDate}</div>
+                      {invoice.paidDate && (
+                        <div><strong>Paid:</strong> {invoice.paidDate}</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-right">
+                      <div className="text-2xl font-bold">${invoice.amount}</div>
+                      <div className="text-sm text-gray-500">
+                        {invoice.services.length} service{invoice.services.length !== 1 ? 's' : ''}
+                      </div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg" title="View Invoice">
+                        <Eye size={18} />
+                      </button>
+                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg" title="Edit Invoice">
+                        <Edit size={18} />
+                      </button>
+                      <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Send Invoice">
+                        <Mail size={18} />
+                      </button>
+                      {invoice.status === 'pending' && (
+                        <button className="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="Mark as Paid">
+                          <DollarSign size={18} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Service Details */}
+                <div className="mt-4 bg-gray-50 rounded-lg p-4">
+                  <div className="text-sm font-medium text-gray-700 mb-2">Services:</div>
+                  {invoice.services.map((service, index) => (
+                    <div key={index} className="flex justify-between text-sm text-gray-600">
+                      <span>{service.name} (×{service.quantity})</span>
+                      <span>${service.total}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+
+    const PaymentMethodsTab = () => (
+      <div className="space-y-6">
+        {/* Payment Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Today's Payments</div>
+            <div className="text-2xl font-bold text-green-600">$75</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">This Week</div>
+            <div className="text-2xl font-bold text-green-600">$540</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Processing Fees</div>
+            <div className="text-2xl font-bold text-gray-600">$12.50</div>
+          </div>
+        </div>
+
+        {/* Recent Payments */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Recent Payments</h3>
+          </div>
+          <div className="divide-y">
+            {paymentMethods.map((payment) => (
+              <div key={payment.id} className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <DollarSign className="text-green-600" size={20} />
+                    </div>
+                    <div>
+                      <div className="font-medium">{payment.customer}</div>
+                      <div className="text-sm text-gray-600">{payment.type} - {payment.details}</div>
+                      <div className="text-xs text-gray-500">{payment.date}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-green-600">+${payment.amount}</div>
+                    <div className="text-xs text-green-600 capitalize">{payment.status}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Payment Methods Setup */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Payment Processing Setup</h3>
+          </div>
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <DollarSign className="text-blue-600" size={24} />
+                <div>
+                  <div className="font-medium">Credit/Debit Cards</div>
+                  <div className="text-sm text-gray-600">Accept Visa, MC, Amex, Discover</div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-green-600 font-medium">Active</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <DollarSign className="text-green-600" size={24} />
+                <div>
+                  <div className="font-medium">Cash Payments</div>
+                  <div className="text-sm text-gray-600">Track in-person cash payments</div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-green-600 font-medium">Active</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3">
+                <Phone className="text-purple-600" size={24} />
+                <div>
+                  <div className="font-medium">Digital Payments</div>
+                  <div className="text-sm text-gray-600">Apple Pay, Google Pay, etc.</div>
+                </div>
+              </div>
+              <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                Enable
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Payments & Invoicing</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Plus size={20} />
+              <span>Record Payment</span>
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Edit size={20} />
+              <span>New Invoice</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          {[
+            { id: 'invoices', label: 'Invoices', icon: Edit },
+            { id: 'payments', label: 'Payments', icon: DollarSign }
+          ].map((tab) => {
+            const Icon = tab.icon
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'invoices' && <InvoicesTab />}
+        {activeTab === 'payments' && <PaymentMethodsTab />}
+      </div>
+    )
+  }
   const getAppointmentsForDate = (date) => {
     const dateStr = date.toISOString().split('T')[0]
     return appointments.filter(apt => apt.date === dateStr)
@@ -637,6 +1297,10 @@ export default function EdgeSuitePro() {
         return <OrdersView />
       case 'customers':
         return <CustomersView />
+      case 'loyalty':
+        return <LoyaltyView />
+      case 'payments':
+        return <PaymentsView />
       case 'calendar':
         return <CalendarView />
       default:
