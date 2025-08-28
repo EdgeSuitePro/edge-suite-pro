@@ -142,24 +142,29 @@ export default function EdgeSuitePro() {
     }
   ]
 
-  // QR Code and Pickup System
+  // Enhanced QR Code and Pickup System with Advanced Features
   const generateQRCode = (orderId, customerId, customerName) => {
     const qrId = `QR-${orderId}-${customerName.replace(/\s+/g, '').toUpperCase()}`
     const pickupUrl = `https://edge-suite-pro.vercel.app/pickup/${qrId}`
+    const expirationDate = new Date()
+    expirationDate.setDate(expirationDate.getDate() + 30) // 30-day expiration
+    
     return {
       qrId,
       pickupUrl,
+      expirationDate: expirationDate.toISOString(),
       printData: {
         businessName: 'Sharp Edge Pro',
         customerName,
         orderId,
         qrId,
-        pickupUrl
+        pickupUrl,
+        expirationDate: expirationDate.toLocaleDateString()
       }
     }
   }
 
-  // Sample pickup confirmations
+  // Enhanced pickup confirmations with new features
   const pickupHistory = [
     {
       id: 'PICKUP-001',
@@ -168,8 +173,54 @@ export default function EdgeSuitePro() {
       customer: 'Mario Rodriguez',
       confirmedAt: '2024-08-22 3:15 PM',
       method: 'QR Code Scan',
-      location: 'Dropbox Location A',
-      verificationCode: '4567'
+      photoConfirmation: true,
+      customerRating: 5,
+      feedback: 'Knives are incredibly sharp! Thank you!',
+      loyaltyPointsAdded: 45,
+      nextServicePrompted: true,
+      socialShared: true
+    },
+    {
+      id: 'PICKUP-002', 
+      orderId: 'ORD-002',
+      qrId: 'QR-ORD-002-SARAHCHEN',
+      customer: 'Sarah Chen',
+      confirmedAt: '2024-08-21 4:30 PM',
+      method: 'QR Code Scan',
+      photoConfirmation: true,
+      customerRating: 5,
+      feedback: 'Perfect for my restaurant kitchen!',
+      loyaltyPointsAdded: 85,
+      nextServicePrompted: true,
+      socialShared: false
+    }
+  ]
+
+  // Pickup analytics data
+  const pickupAnalytics = {
+    totalPickups: 156,
+    avgPickupTime: '2.3 hours', // from ready to picked up
+    peakPickupTimes: [
+      { time: '5:00-6:00 PM', percentage: 35 },
+      { time: '12:00-1:00 PM', percentage: 28 },
+      { time: '8:00-9:00 AM', percentage: 22 }
+    ],
+    customerSatisfaction: 4.8,
+    photoConfirmationRate: 87,
+    socialShareRate: 34,
+    repeatBookingRate: 67,
+    noShowRate: 3.2
+  }
+
+  // Reminder system data
+  const pendingReminders = [
+    {
+      orderId: 'ORD-004',
+      customer: 'John Smith',
+      daysWaiting: 3,
+      remindersSent: 1,
+      nextReminderDue: '2024-08-25 10:00 AM',
+      reminderType: 'email'
     }
   ]
   const photoSessions = [
@@ -495,7 +546,280 @@ export default function EdgeSuitePro() {
     return colors[status] || 'bg-gray-100 border-gray-500 text-gray-800'
   }
 
-  // Photos View Component
+  // Analytics View Component with Pickup Analytics
+  const AnalyticsView = () => {
+    const [activeTab, setActiveTab] = useState('overview')
+
+    const OverviewTab = () => (
+      <div className="space-y-6">
+        {/* Key Business Metrics */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Monthly Revenue</div>
+            <div className="text-2xl font-bold text-green-600">$3,240</div>
+            <div className="text-xs text-green-600">+15% vs last month</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Orders Completed</div>
+            <div className="text-2xl font-bold text-blue-600">127</div>
+            <div className="text-xs text-blue-600">+8% vs last month</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Customer Satisfaction</div>
+            <div className="text-2xl font-bold text-yellow-600">{pickupAnalytics.customerSatisfaction}</div>
+            <div className="text-xs text-yellow-600">+0.2 vs last month</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Avg Order Value</div>
+            <div className="text-2xl font-bold text-purple-600">$76</div>
+            <div className="text-xs text-purple-600">+5% vs last month</div>
+          </div>
+        </div>
+
+        {/* Peak Times Analysis */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Peak Pickup Times</h3>
+          </div>
+          <div className="p-6">
+            <div className="space-y-4">
+              {pickupAnalytics.peakPickupTimes.map((time, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Clock className="text-blue-600" size={20} />
+                    <span className="font-medium">{time.time}</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full" 
+                        style={{ width: `${time.percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-medium w-12">{time.percentage}%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 p-3 bg-blue-50 rounded text-sm">
+              <strong>💡 Insight:</strong> Most customers pick up after work (5-6 PM). Consider extending dropbox access during peak times.
+            </div>
+          </div>
+        </div>
+
+        {/* Customer Engagement Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-6 border-b">
+              <h3 className="text-lg font-semibold">Customer Engagement</h3>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Photo Confirmation Rate</span>
+                <span className="font-bold text-green-600">{pickupAnalytics.photoConfirmationRate}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Social Share Rate</span>
+                <span className="font-bold text-purple-600">{pickupAnalytics.socialShareRate}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Repeat Booking Rate</span>
+                <span className="font-bold text-blue-600">{pickupAnalytics.repeatBookingRate}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">No-Show Rate</span>
+                <span className="font-bold text-red-600">{pickupAnalytics.noShowRate}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-6 border-b">
+              <h3 className="text-lg font-semibold">Pickup Efficiency</h3>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600">{pickupAnalytics.avgPickupTime}</div>
+                <div className="text-sm text-gray-600">Average pickup time from ready</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{pickupAnalytics.totalPickups}</div>
+                <div className="text-sm text-gray-600">Total pickups completed</div>
+              </div>
+              <div className="mt-4 p-3 bg-green-50 rounded text-sm">
+                <strong>🎯 Goal:</strong> Reduce average pickup time to under 2 hours through better customer communication.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    const RemindersTab = () => (
+      <div className="space-y-6">
+        {/* Reminder Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Orders Awaiting Pickup</div>
+            <div className="text-2xl font-bold text-yellow-600">7</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Reminders Sent Today</div>
+            <div className="text-2xl font-bold text-blue-600">3</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Avg Response Time</div>
+            <div className="text-2xl font-bold text-green-600">4.2 hrs</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Long-term Storage</div>
+            <div className="text-2xl font-bold text-red-600">1</div>
+          </div>
+        </div>
+
+        {/* Active Reminders */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Active Pickup Reminders</h3>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                <Bell size={20} />
+                <span>Send Reminder</span>
+              </button>
+            </div>
+          </div>
+          <div className="divide-y">
+            {pendingReminders.map((reminder) => (
+              <div key={reminder.orderId} className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      reminder.daysWaiting > 5 ? 'bg-red-100' : 
+                      reminder.daysWaiting > 2 ? 'bg-yellow-100' : 'bg-blue-100'
+                    }`}>
+                      <Bell className={`${
+                        reminder.daysWaiting > 5 ? 'text-red-600' : 
+                        reminder.daysWaiting > 2 ? 'text-yellow-600' : 'text-blue-600'
+                      }`} size={20} />
+                    </div>
+                    <div>
+                      <div className="font-medium">{reminder.customer}</div>
+                      <div className="text-sm text-gray-600">Order: {reminder.orderId}</div>
+                      <div className="text-xs text-gray-500">
+                        Waiting {reminder.daysWaiting} days • {reminder.remindersSent} reminder{reminder.remindersSent !== 1 ? 's' : ''} sent
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-right">
+                      <div className="text-sm font-medium">Next: {reminder.reminderType}</div>
+                      <div className="text-xs text-gray-500">{reminder.nextReminderDue}</div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+                        <Mail size={18} />
+                      </button>
+                      <button className="p-2 text-green-600 hover:bg-green-50 rounded-lg">
+                        <Phone size={18} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Reminder Settings */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Automated Reminder Settings</h3>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  First Reminder
+                </label>
+                <select className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option>24 hours after ready</option>
+                  <option>48 hours after ready</option>
+                  <option>72 hours after ready</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Second Reminder
+                </label>
+                <select className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option>3 days after first</option>
+                  <option>5 days after first</option>
+                  <option>7 days after first</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Final Reminder
+                </label>
+                <select className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option>7 days after second</option>
+                  <option>10 days after second</option>
+                  <option>14 days after second</option>
+                </select>
+              </div>
+            </div>
+            <div className="mt-6">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                Save Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Analytics & Insights</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Download size={20} />
+              <span>Export Report</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          {[
+            { id: 'overview', label: 'Business Overview', icon: BarChart3 },
+            { id: 'reminders', label: 'Pickup Reminders', icon: Bell }
+          ].map((tab) => {
+            const Icon = tab.icon
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'reminders' && <RemindersTab />}
+      </div>
+    )
+  }
   const PhotosView = () => {
     const [activeTab, setActiveTab] = useState('sessions')
     const [selectedSession, setSelectedSession] = useState(null)
@@ -1944,25 +2268,38 @@ export default function EdgeSuitePro() {
             </div>
             
             <div className="p-6">
-              {/* QR Code Label Preview */}
-              <div className="border-2 border-dashed border-gray-300 p-6 text-center bg-white shadow-sm">
-                <div className="mb-4">
-                  {/* QR Code Placeholder */}
-                  <div className="w-24 h-24 bg-black mx-auto mb-2 flex items-center justify-center">
-                    <span className="text-white text-xs">QR CODE</span>
+                {/* Enhanced QR Code Label Preview with new features */}
+                <div className="border-2 border-dashed border-gray-300 p-6 text-center bg-white shadow-sm">
+                  <div className="mb-4">
+                    {/* QR Code Placeholder */}
+                    <div className="w-24 h-24 bg-black mx-auto mb-2 flex items-center justify-center">
+                      <span className="text-white text-xs">QR CODE</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-1 text-sm">
+                    <div className="font-bold text-blue-600">Sharp Edge Pro</div>
+                    <div className="font-semibold">{order.customer}</div>
+                    <div className="text-gray-600">Order: {order.id}</div>
+                    <div className="text-gray-600">{order.knives} Knives</div>
+                    <div className="text-gray-600">{order.service}</div>
+                    <div className="text-xs text-gray-500 mt-2">Scan to Confirm Pickup</div>
+                    <div className="text-xs text-gray-400">{qrData.qrId}</div>
+                    <div className="text-xs text-gray-400">Expires: {qrData.printData.expirationDate}</div>
                   </div>
                 </div>
-                
-                <div className="space-y-1 text-sm">
-                  <div className="font-bold text-blue-600">Sharp Edge Pro</div>
-                  <div className="font-semibold">{order.customer}</div>
-                  <div className="text-gray-600">Order: {order.id}</div>
-                  <div className="text-gray-600">{order.knives} Knives</div>
-                  <div className="text-gray-600">{order.service}</div>
-                  <div className="text-xs text-gray-500 mt-2">Scan to Confirm Pickup</div>
-                  <div className="text-xs text-gray-400">{qrData.qrId}</div>
+
+                {/* Enhanced Pickup Features */}
+                <div className="mt-4 p-3 bg-green-50 rounded text-xs">
+                  <div className="font-medium text-green-800 mb-2">🎯 Customer Experience:</div>
+                  <ul className="text-green-700 space-y-1 list-disc list-inside">
+                    <li>Photo confirmation of pickup</li>
+                    <li>Instant 5-star rating request</li>
+                    <li>Automatic loyalty points (+{order.total} points)</li>
+                    <li>Social sharing opportunity</li>
+                    <li>Next service booking prompt</li>
+                  </ul>
                 </div>
-              </div>
 
               {/* Pickup URL */}
               <div className="mt-4 p-3 bg-gray-50 rounded text-xs">
@@ -2100,26 +2437,62 @@ export default function EdgeSuitePro() {
                 <p className="text-sm">Customers will confirm pickup by scanning QR codes</p>
               </div>
             ) : (
-              pickupHistory.map((pickup) => (
-                <div key={pickup.id} className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                        <CheckCircle className="text-green-600" size={20} />
+              {pickupHistory.map((pickup) => (
+                <div key={pickup.id} className="p-6 bg-gradient-to-r from-green-50 to-blue-50">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-4">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="text-green-600" size={24} />
                       </div>
-                      <div>
-                        <div className="font-medium">{pickup.customer}</div>
-                        <div className="text-sm text-gray-600">Order: {pickup.orderId}</div>
-                        <div className="text-xs text-gray-500">Via {pickup.method} at {pickup.location}</div>
+                      <div className="flex-1">
+                        <div className="font-medium text-lg">{pickup.customer}</div>
+                        <div className="text-sm text-gray-600 mb-2">Order: {pickup.orderId}</div>
+                        
+                        {/* Enhanced pickup details */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                          <div className="flex items-center space-x-1">
+                            <Camera className="text-blue-600" size={12} />
+                            <span className={pickup.photoConfirmation ? 'text-green-600' : 'text-gray-500'}>
+                              Photo: {pickup.photoConfirmation ? 'Yes' : 'No'}
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Star className="text-yellow-500" size={12} />
+                            <span className="text-yellow-600">Rating: {pickup.customerRating}/5</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Gift className="text-purple-600" size={12} />
+                            <span className="text-purple-600">+{pickup.loyaltyPointsAdded} points</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Users className="text-blue-600" size={12} />
+                            <span className={pickup.socialShared ? 'text-green-600' : 'text-gray-500'}>
+                              Shared: {pickup.socialShared ? 'Yes' : 'No'}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        {pickup.feedback && (
+                          <div className="mt-2 p-2 bg-white rounded text-xs">
+                            <strong>Feedback:</strong> "{pickup.feedback}"
+                          </div>
+                        )}
+                        
+                        {pickup.nextServicePrompted && (
+                          <div className="mt-2 text-xs text-blue-600">
+                            ✨ Customer prompted for next service booking
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-medium text-green-600">Picked Up</div>
+                      <div className="text-sm font-medium text-green-600">Completed</div>
                       <div className="text-xs text-gray-500">{pickup.confirmedAt}</div>
+                      <div className="text-xs text-gray-500">Via {pickup.method}</div>
                     </div>
                   </div>
                 </div>
-              ))
+              ))}
             )}
           </div>
         </div>
@@ -2214,6 +2587,8 @@ export default function EdgeSuitePro() {
         return <OrdersView />
       case 'customers':
         return <CustomersView />
+      case 'analytics':
+        return <AnalyticsView />
       case 'photos':
         return <PhotosView />
       case 'marketing':
