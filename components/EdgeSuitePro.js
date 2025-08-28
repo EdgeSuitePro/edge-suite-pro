@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { 
   Package, 
   Users, 
@@ -15,7 +15,6 @@ import {
   Filter,
   Eye,
   Edit,
-  Trash2,
   CheckCircle,
   Clock,
   AlertCircle,
@@ -26,19 +25,18 @@ import {
   User,
   Home,
   Scissors
-} from 'lucide-react';
+} from 'lucide-react'
 
 export default function EdgeSuitePro() {
-  const [currentView, setCurrentView] = useState('dashboard');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('dashboard')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   const currentUser = {
     name: 'John Smith',
     role: 'admin',
     business: 'Sharp Edge Pro'
-  };
+  }
 
-  // Sample data
   const orders = [
     {
       id: 'ORD-001',
@@ -70,7 +68,7 @@ export default function EdgeSuitePro() {
       total: 180.00,
       priority: 'high'
     }
-  ];
+  ]
 
   const customers = [
     {
@@ -95,7 +93,7 @@ export default function EdgeSuitePro() {
       totalOrders: 23,
       lastOrder: '2024-08-21'
     }
-  ];
+  ]
 
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
@@ -110,7 +108,7 @@ export default function EdgeSuitePro() {
     { id: 'inventory', label: 'Inventory', icon: Layers },
     { id: 'staff', label: 'Staff', icon: User },
     { id: 'settings', label: 'Settings', icon: Settings }
-  ];
+  ]
 
   const getStatusColor = (status) => {
     const colors = {
@@ -120,13 +118,13 @@ export default function EdgeSuitePro() {
       'Finishing': 'bg-purple-100 text-purple-800',
       'Delivery': 'bg-green-100 text-green-800',
       'Pickup': 'bg-green-100 text-green-800'
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  };
+    }
+    return colors[status] || 'bg-gray-100 text-gray-800'
+  }
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
 
   const DashboardView = () => (
     <div className="space-y-6">
@@ -143,7 +141,6 @@ export default function EdgeSuitePro() {
         </div>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
@@ -190,7 +187,6 @@ export default function EdgeSuitePro() {
         </div>
       </div>
 
-      {/* Recent Orders */}
       <div className="bg-white rounded-lg shadow-sm border">
         <div className="p-6 border-b">
           <h2 className="text-lg font-semibold">Recent Orders</h2>
@@ -223,7 +219,7 @@ export default function EdgeSuitePro() {
         </div>
       </div>
     </div>
-  );
+  )
 
   const OrdersView = () => (
     <div className="space-y-6">
@@ -302,7 +298,7 @@ export default function EdgeSuitePro() {
         </div>
       </div>
     </div>
-  );
+  )
 
   const CustomersView = () => (
     <div className="space-y-6">
@@ -381,25 +377,27 @@ export default function EdgeSuitePro() {
         </div>
       </div>
     </div>
-  );
+  )
 
   const renderCurrentView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <DashboardView />;
+        return <DashboardView />
       case 'orders':
-        return <OrdersView />;
+        return <OrdersView />
       case 'customers':
-        return <CustomersView />;
+        return <CustomersView />
       default:
         return (
           <div className="text-center py-12">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">{currentView.charAt(0).toUpperCase() + currentView.slice(1)}</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              {currentView.charAt(0).toUpperCase() + currentView.slice(1)}
+            </h2>
             <p className="text-gray-500">This module is coming in Phase 2!</p>
           </div>
-        );
+        )
     }
-  };
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -417,7 +415,7 @@ export default function EdgeSuitePro() {
             <div className="mt-5 flex-grow flex flex-col">
               <nav className="flex-1 px-2 space-y-1">
                 {navigationItems.map((item) => {
-                  const Icon = item.icon;
+                  const Icon = item.icon
                   return (
                     <button
                       key={item.id}
@@ -431,7 +429,7 @@ export default function EdgeSuitePro() {
                       <Icon className="mr-3 flex-shrink-0 h-5 w-5" />
                       {item.label}
                     </button>
-                  );
+                  )
                 })}
               </nav>
             </div>
@@ -463,13 +461,13 @@ export default function EdgeSuitePro() {
               </div>
               <nav className="mt-5 px-2 space-y-1">
                 {navigationItems.map((item) => {
-                  const Icon = item.icon;
+                  const Icon = item.icon
                   return (
                     <button
                       key={item.id}
                       onClick={() => {
-                        setCurrentView(item.id);
-                        setIsMobileMenuOpen(false);
+                        setCurrentView(item.id)
+                        setIsMobileMenuOpen(false)
                       }}
                       className={`${
                         currentView === item.id
@@ -480,7 +478,7 @@ export default function EdgeSuitePro() {
                       <Icon className="mr-3 flex-shrink-0 h-5 w-5" />
                       {item.label}
                     </button>
-                  );
+                  )
                 })}
               </nav>
             </div>
@@ -532,5 +530,5 @@ export default function EdgeSuitePro() {
         </main>
       </div>
     </div>
-  );
+  )
 }
