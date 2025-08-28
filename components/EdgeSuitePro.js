@@ -26,7 +26,9 @@ import {
   Home,
   Scissors,
   Phone,
-  Mail
+  Mail,
+  Download,
+  Upload
 } from 'lucide-react'
 
 export default function EdgeSuitePro() {
@@ -140,7 +142,189 @@ export default function EdgeSuitePro() {
     }
   ]
 
-  // Sample loyalty data
+  // QR Code and Pickup System
+  const generateQRCode = (orderId, customerId, customerName) => {
+    const qrId = `QR-${orderId}-${customerName.replace(/\s+/g, '').toUpperCase()}`
+    const pickupUrl = `https://edge-suite-pro.vercel.app/pickup/${qrId}`
+    return {
+      qrId,
+      pickupUrl,
+      printData: {
+        businessName: 'Sharp Edge Pro',
+        customerName,
+        orderId,
+        qrId,
+        pickupUrl
+      }
+    }
+  }
+
+  // Sample pickup confirmations
+  const pickupHistory = [
+    {
+      id: 'PICKUP-001',
+      orderId: 'ORD-001',
+      qrId: 'QR-ORD-001-MARIORODRIGUEZ',
+      customer: 'Mario Rodriguez',
+      confirmedAt: '2024-08-22 3:15 PM',
+      method: 'QR Code Scan',
+      location: 'Dropbox Location A',
+      verificationCode: '4567'
+    }
+  ]
+  const photoSessions = [
+    {
+      id: 'PHOTO-001',
+      orderId: 'ORD-001',
+      customer: 'Mario Rodriguez',
+      date: '2024-08-22',
+      beforePhotos: [
+        { id: 'B001', name: 'chef_knife_before.jpg', size: '2.4 MB', timestamp: '10:15 AM' },
+        { id: 'B002', name: 'paring_knife_before.jpg', size: '1.8 MB', timestamp: '10:16 AM' },
+        { id: 'B003', name: 'utility_knife_before.jpg', size: '2.1 MB', timestamp: '10:17 AM' }
+      ],
+      afterPhotos: [
+        { id: 'A001', name: 'chef_knife_after.jpg', size: '2.2 MB', timestamp: '2:45 PM' },
+        { id: 'A002', name: 'paring_knife_after.jpg', size: '1.9 MB', timestamp: '2:46 PM' },
+        { id: 'A003', name: 'utility_knife_after.jpg', size: '2.0 MB', timestamp: '2:47 PM' }
+      ],
+      status: 'complete',
+      shared: true,
+      notes: 'Significant improvement in edge geometry'
+    },
+    {
+      id: 'PHOTO-002',
+      orderId: 'ORD-002',
+      customer: 'Sarah Chen',
+      date: '2024-08-21',
+      beforePhotos: [
+        { id: 'B004', name: 'santoku_before.jpg', size: '2.8 MB', timestamp: '9:30 AM' },
+        { id: 'B005', name: 'cleaver_before.jpg', size: '3.1 MB', timestamp: '9:32 AM' }
+      ],
+      afterPhotos: [
+        { id: 'A004', name: 'santoku_after.jpg', size: '2.6 MB', timestamp: '4:15 PM' }
+      ],
+      status: 'in_progress',
+      shared: false,
+      notes: 'Restaurant chef - premium service with handle repair'
+    },
+    {
+      id: 'PHOTO-003',
+      orderId: 'ORD-003',
+      customer: 'Restaurant Depot',
+      date: '2024-08-20',
+      beforePhotos: [
+        { id: 'B006', name: 'commercial_set_before.jpg', size: '4.2 MB', timestamp: '8:00 AM' }
+      ],
+      afterPhotos: [],
+      status: 'pending',
+      shared: false,
+      notes: 'Bulk commercial order - 12 knives'
+    }
+  ]
+
+  const photoCategories = [
+    {
+      name: 'Before Photos',
+      count: 6,
+      totalSize: '16.4 MB',
+      icon: '📸',
+      color: 'bg-red-100 text-red-800'
+    },
+    {
+      name: 'After Photos',
+      count: 4,
+      totalSize: '8.7 MB', 
+      icon: '✨',
+      color: 'bg-green-100 text-green-800'
+    },
+    {
+      name: 'Process Photos',
+      count: 8,
+      totalSize: '12.3 MB',
+      icon: '⚙️',
+      color: 'bg-blue-100 text-blue-800'
+    },
+    {
+      name: 'Damage Assessment',
+      count: 3,
+      totalSize: '5.1 MB',
+      icon: '🔍',
+      color: 'bg-yellow-100 text-yellow-800'
+    }
+  ]
+  const campaigns = [
+    {
+      id: 'CAMP-001',
+      name: 'Summer Sharpening Special',
+      type: 'promotional',
+      status: 'active',
+      segment: 'Home Cooks',
+      sent: 342,
+      opened: 189,
+      clicked: 45,
+      conversions: 12,
+      startDate: '2024-08-15',
+      endDate: '2024-08-31'
+    },
+    {
+      id: 'CAMP-002',
+      name: 'Restaurant Partner Outreach',
+      type: 'acquisition',
+      status: 'scheduled',
+      segment: 'Restaurant Chefs',
+      sent: 0,
+      opened: 0,
+      clicked: 0,
+      conversions: 0,
+      startDate: '2024-08-25',
+      endDate: '2024-09-15'
+    },
+    {
+      id: 'CAMP-003',
+      name: 'Loyalty Milestone Celebration',
+      type: 'retention',
+      status: 'completed',
+      segment: 'Gold Members',
+      sent: 168,
+      opened: 145,
+      clicked: 67,
+      conversions: 23,
+      startDate: '2024-08-01',
+      endDate: '2024-08-10'
+    }
+  ]
+
+  const segments = [
+    {
+      name: 'Home Cooks',
+      count: 654,
+      engagement: 68,
+      avgOrderValue: 45,
+      description: 'Individual customers who cook at home'
+    },
+    {
+      name: 'Restaurant Chefs',
+      count: 187,
+      engagement: 82,
+      avgOrderValue: 125,
+      description: 'Professional chefs and restaurant staff'
+    },
+    {
+      name: 'Hunters',
+      count: 156,
+      engagement: 71,
+      avgOrderValue: 65,
+      description: 'Hunters and outdoor enthusiasts'
+    },
+    {
+      name: 'Fishermen',
+      count: 89,
+      engagement: 75,
+      avgOrderValue: 55,
+      description: 'Fishing enthusiasts and guides'
+    }
+  ]
   const loyaltyStats = {
     totalMembers: 1247,
     activeMembers: 892,
@@ -311,7 +495,615 @@ export default function EdgeSuitePro() {
     return colors[status] || 'bg-gray-100 border-gray-500 text-gray-800'
   }
 
-  // Loyalty View Component
+  // Photos View Component
+  const PhotosView = () => {
+    const [activeTab, setActiveTab] = useState('sessions')
+    const [selectedSession, setSelectedSession] = useState(null)
+
+    const getSessionStatusColor = (status) => {
+      const colors = {
+        complete: 'bg-green-100 text-green-800',
+        in_progress: 'bg-blue-100 text-blue-800',
+        pending: 'bg-yellow-100 text-yellow-800'
+      }
+      return colors[status] || 'bg-gray-100 text-gray-800'
+    }
+
+    const PhotoSessionsTab = () => (
+      <div className="space-y-6">
+        {/* Photo Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Total Sessions</div>
+            <div className="text-2xl font-bold text-blue-600">{photoSessions.length}</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Photos Captured</div>
+            <div className="text-2xl font-bold text-green-600">
+              {photoSessions.reduce((sum, s) => sum + s.beforePhotos.length + s.afterPhotos.length, 0)}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Completed Sets</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {photoSessions.filter(s => s.status === 'complete').length}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Shared with Customers</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {photoSessions.filter(s => s.shared).length}
+            </div>
+          </div>
+        </div>
+
+        {/* Photo Sessions List */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Photo Sessions</h3>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                <Camera size={20} />
+                <span>New Session</span>
+              </button>
+            </div>
+          </div>
+          <div className="divide-y">
+            {photoSessions.map((session) => (
+              <div key={session.id} className="p-6 hover:bg-gray-50">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <div className="font-semibold text-lg">{session.id}</div>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getSessionStatusColor(session.status)}`}>
+                        {session.status.replace('_', ' ')}
+                      </span>
+                      {session.shared && (
+                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                          Shared
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <div><strong>Customer:</strong> {session.customer}</div>
+                      <div><strong>Order:</strong> {session.orderId}</div>
+                      <div><strong>Date:</strong> {session.date}</div>
+                      {session.notes && (
+                        <div><strong>Notes:</strong> {session.notes}</div>
+                      )}
+                    </div>
+                    
+                    <div className="mt-3 flex items-center space-x-6">
+                      <div className="flex items-center space-x-2">
+                        <Camera className="text-red-500" size={16} />
+                        <span className="text-sm text-gray-600">
+                          Before: {session.beforePhotos.length} photos
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Camera className="text-green-500" size={16} />
+                        <span className="text-sm text-gray-600">
+                          After: {session.afterPhotos.length} photos
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2 ml-4">
+                    <button 
+                      onClick={() => setSelectedSession(session)}
+                      className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg" 
+                      title="View Photos"
+                    >
+                      <Eye size={18} />
+                    </button>
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg" title="Edit Session">
+                      <Edit size={18} />
+                    </button>
+                    <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Share with Customer">
+                      <Users size={18} />
+                    </button>
+                    <button className="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="Download">
+                      <Download size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Photo Session Detail Modal */}
+        {selectedSession && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold">{selectedSession.customer} - {selectedSession.orderId}</h3>
+                  <p className="text-sm text-gray-600">{selectedSession.date}</p>
+                </div>
+                <button 
+                  onClick={() => setSelectedSession(null)}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                {/* Before Photos */}
+                <div>
+                  <h4 className="text-md font-semibold mb-3 flex items-center">
+                    <Camera className="text-red-500 mr-2" size={20} />
+                    Before Photos ({selectedSession.beforePhotos.length})
+                  </h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {selectedSession.beforePhotos.map((photo) => (
+                      <div key={photo.id} className="border rounded-lg p-3 bg-red-50">
+                        <div className="aspect-video bg-red-200 rounded mb-2 flex items-center justify-center">
+                          <Camera className="text-red-500" size={24} />
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          <div className="font-medium truncate">{photo.name}</div>
+                          <div>{photo.size} • {photo.timestamp}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* After Photos */}
+                <div>
+                  <h4 className="text-md font-semibold mb-3 flex items-center">
+                    <Camera className="text-green-500 mr-2" size={20} />
+                    After Photos ({selectedSession.afterPhotos.length})
+                  </h4>
+                  {selectedSession.afterPhotos.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
+                      <Camera size={48} className="mx-auto mb-3 text-gray-300" />
+                      <p>No after photos yet</p>
+                      <button className="mt-2 text-blue-600 hover:text-blue-700 text-sm">
+                        Add after photos
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {selectedSession.afterPhotos.map((photo) => (
+                        <div key={photo.id} className="border rounded-lg p-3 bg-green-50">
+                          <div className="aspect-video bg-green-200 rounded mb-2 flex items-center justify-center">
+                            <Camera className="text-green-500" size={24} />
+                          </div>
+                          <div className="text-xs text-gray-600">
+                            <div className="font-medium truncate">{photo.name}</div>
+                            <div>{photo.size} • {photo.timestamp}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end space-x-3 pt-4 border-t">
+                  <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    Download All
+                  </button>
+                  <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                    Share with Customer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+
+    const GalleryTab = () => (
+      <div className="space-y-6">
+        {/* Photo Categories */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {photoCategories.map((category) => (
+            <div key={category.name} className="bg-white p-4 rounded-lg shadow-sm border">
+              <div className="flex items-center space-x-3">
+                <div className="text-2xl">{category.icon}</div>
+                <div className="flex-1">
+                  <div className="font-semibold">{category.name}</div>
+                  <div className="text-sm text-gray-600">{category.count} photos</div>
+                  <div className="text-xs text-gray-500">{category.totalSize}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Gallery Grid */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Photo Gallery</h3>
+              <div className="flex space-x-2">
+                <button className="px-3 py-2 text-sm border rounded-lg hover:bg-gray-50">
+                  Grid View
+                </button>
+                <button className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg">
+                  List View
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {/* Sample photo thumbnails */}
+              {Array.from({ length: 12 }, (_, i) => (
+                <div key={i} className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-300 cursor-pointer transition-colors">
+                  <Camera className="text-gray-500" size={24} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Storage Usage */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Storage Usage</h3>
+          </div>
+          <div className="p-6">
+            <div className="mb-4">
+              <div className="flex justify-between text-sm mb-2">
+                <span>Used Storage</span>
+                <span>42.5 MB / 1 GB</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{ width: '4.25%' }}></div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Before Photos:</span>
+                <span className="font-medium">16.4 MB</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">After Photos:</span>
+                <span className="font-medium">8.7 MB</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Process Photos:</span>
+                <span className="font-medium">12.3 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Photo Management</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Camera size={20} />
+              <span>Capture Photos</span>
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Upload size={20} />
+              <span>Upload Photos</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          {[
+            { id: 'sessions', label: 'Photo Sessions', icon: Camera },
+            { id: 'gallery', label: 'Gallery', icon: Eye }
+          ].map((tab) => {
+            const Icon = tab.icon
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'sessions' && <PhotoSessionsTab />}
+        {activeTab === 'gallery' && <GalleryTab />}
+      </div>
+    )
+  }
+    const colors = {
+      active: 'bg-green-100 text-green-800',
+      scheduled: 'bg-blue-100 text-blue-800',
+      completed: 'bg-gray-100 text-gray-800',
+      paused: 'bg-yellow-100 text-yellow-800'
+    }
+    return colors[status] || 'bg-gray-100 text-gray-800'
+  }
+
+  // Marketing View Component
+  const MarketingView = () => {
+    const [activeTab, setActiveTab] = useState('campaigns')
+
+    const CampaignsTab = () => (
+      <div className="space-y-6">
+        {/* Campaign Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Active Campaigns</div>
+            <div className="text-2xl font-bold text-green-600">
+              {campaigns.filter(c => c.status === 'active').length}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Total Sent</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {campaigns.reduce((sum, c) => sum + c.sent, 0).toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Avg Open Rate</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {Math.round(campaigns.reduce((sum, c) => sum + (c.sent > 0 ? (c.opened / c.sent) * 100 : 0), 0) / campaigns.filter(c => c.sent > 0).length)}%
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Conversions</div>
+            <div className="text-2xl font-bold text-green-600">
+              {campaigns.reduce((sum, c) => sum + c.conversions, 0)}
+            </div>
+          </div>
+        </div>
+
+        {/* Campaigns List */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Marketing Campaigns</h3>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                <Plus size={20} />
+                <span>New Campaign</span>
+              </button>
+            </div>
+          </div>
+          <div className="divide-y">
+            {campaigns.map((campaign) => (
+              <div key={campaign.id} className="p-6">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h4 className="font-semibold text-lg">{campaign.name}</h4>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCampaignStatusColor(campaign.status)}`}>
+                        {campaign.status}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 mb-3">
+                      <div><strong>Type:</strong> {campaign.type} • <strong>Segment:</strong> {campaign.segment}</div>
+                      <div><strong>Period:</strong> {campaign.startDate} to {campaign.endDate}</div>
+                    </div>
+                    
+                    {campaign.sent > 0 && (
+                      <div className="grid grid-cols-4 gap-4 text-center">
+                        <div>
+                          <div className="text-xl font-bold text-blue-600">{campaign.sent}</div>
+                          <div className="text-xs text-gray-500">Sent</div>
+                        </div>
+                        <div>
+                          <div className="text-xl font-bold text-green-600">{campaign.opened}</div>
+                          <div className="text-xs text-gray-500">Opened ({Math.round((campaign.opened / campaign.sent) * 100)}%)</div>
+                        </div>
+                        <div>
+                          <div className="text-xl font-bold text-purple-600">{campaign.clicked}</div>
+                          <div className="text-xs text-gray-500">Clicked ({Math.round((campaign.clicked / campaign.sent) * 100)}%)</div>
+                        </div>
+                        <div>
+                          <div className="text-xl font-bold text-orange-600">{campaign.conversions}</div>
+                          <div className="text-xs text-gray-500">Converted ({Math.round((campaign.conversions / campaign.sent) * 100)}%)</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex space-x-2 ml-4">
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                      <Eye size={18} />
+                    </button>
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                      <Edit size={18} />
+                    </button>
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                      <BarChart3 size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+
+    const SegmentsTab = () => (
+      <div className="space-y-6">
+        {/* Segments Overview */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Total Customers</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {segments.reduce((sum, s) => sum + s.count, 0).toLocaleString()}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Avg Engagement</div>
+            <div className="text-2xl font-bold text-green-600">
+              {Math.round(segments.reduce((sum, s) => sum + s.engagement, 0) / segments.length)}%
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Top Segment</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {segments.sort((a, b) => b.count - a.count)[0].name}
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="text-sm text-gray-600">Highest AOV</div>
+            <div className="text-2xl font-bold text-green-600">
+              ${segments.sort((a, b) => b.avgOrderValue - a.avgOrderValue)[0].avgOrderValue}
+            </div>
+          </div>
+        </div>
+
+        {/* Customer Segments */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Customer Segments</h3>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+                <Target size={20} />
+                <span>Create Segment</span>
+              </button>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            {segments.map((segment) => (
+              <div key={segment.name} className="border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-lg font-semibold">{segment.name}</h4>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-blue-600">{segment.count}</div>
+                    <div className="text-sm text-gray-600">customers</div>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-4">{segment.description}</p>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-lg font-bold text-green-600">{segment.engagement}%</div>
+                    <div className="text-xs text-gray-600">Engagement</div>
+                  </div>
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-lg font-bold text-purple-600">${segment.avgOrderValue}</div>
+                    <div className="text-xs text-gray-600">Avg Order</div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 flex space-x-2">
+                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm">
+                    Create Campaign
+                  </button>
+                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <Edit size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Pre-built Templates */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Campaign Templates</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
+            {[
+              {
+                name: 'Welcome Series',
+                description: 'Onboard new customers with 3-part email sequence',
+                type: 'Automated',
+                icon: '👋'
+              },
+              {
+                name: 'Win-Back Campaign',
+                description: 'Re-engage customers who haven\'t visited in 90 days',
+                type: 'Behavioral',
+                icon: '🎯'
+              },
+              {
+                name: 'Seasonal Promotions',
+                description: 'Holiday and seasonal marketing templates',
+                type: 'Promotional',
+                icon: '🎉'
+              }
+            ].map((template, index) => (
+              <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="text-2xl mb-2">{template.icon}</div>
+                <h4 className="font-semibold mb-1">{template.name}</h4>
+                <p className="text-sm text-gray-600 mb-3">{template.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    {template.type}
+                  </span>
+                  <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                    Use Template
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Marketing & Campaigns</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Target size={20} />
+              <span>Quick Campaign</span>
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Plus size={20} />
+              <span>New Campaign</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          {[
+            { id: 'campaigns', label: 'Campaigns', icon: Target },
+            { id: 'segments', label: 'Customer Segments', icon: Users }
+          ].map((tab) => {
+            const Icon = tab.icon
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-md text-sm font-medium flex items-center space-x-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-gray-900 shadow'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Icon size={16} />
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'campaigns' && <CampaignsTab />}
+        {activeTab === 'segments' && <SegmentsTab />}
+      </div>
+    )
+  }
   const LoyaltyView = () => {
     const [activeTab, setActiveTab] = useState('program')
 
@@ -1131,84 +1923,209 @@ export default function EdgeSuitePro() {
     </div>
   )
 
-  const OrdersView = () => (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
-        <div className="mt-4 sm:mt-0 flex space-x-3">
-          <button className="bg-white border border-gray-300 px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-50">
-            <Filter size={20} />
-            <span>Filter</span>
-          </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-            <Plus size={20} />
-            <span>New Order</span>
-          </button>
-        </div>
-      </div>
+  // Enhanced Orders View Component with QR Code Generation
+  const OrdersView = () => {
+    const [showQRModal, setShowQRModal] = useState(null)
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-        <input
-          type="text"
-          placeholder="Search orders..."
-          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
-
-      <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg overflow-x-auto">
-        {['All', 'Receiving', 'Inspection', 'Sharpening', 'Finishing', 'Delivery'].map((stage) => (
-          <button
-            key={stage}
-            className="px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap bg-white text-gray-700 hover:bg-gray-50"
-          >
-            {stage}
-          </button>
-        ))}
-      </div>
-
-      <div className="bg-white rounded-lg shadow-sm border">
-        <div className="divide-y">
-          {orders.map((order) => (
-            <div key={order.id} className="p-6 hover:bg-gray-50">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3">
-                    <div className="font-semibold text-lg">{order.id}</div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
-                      {order.status}
-                    </span>
-                    {order.priority === 'high' && (
-                      <AlertCircle className="text-red-600" size={18} />
-                    )}
+    const QRCodeModal = ({ order }) => {
+      const qrData = generateQRCode(order.id, order.customer.replace(/\s+/g, ''), order.customer)
+      
+      return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full">
+            <div className="p-6 border-b flex justify-between items-center">
+              <h3 className="text-lg font-semibold">QR Pickup Label</h3>
+              <button 
+                onClick={() => setShowQRModal(null)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              {/* QR Code Label Preview */}
+              <div className="border-2 border-dashed border-gray-300 p-6 text-center bg-white shadow-sm">
+                <div className="mb-4">
+                  {/* QR Code Placeholder */}
+                  <div className="w-24 h-24 bg-black mx-auto mb-2 flex items-center justify-center">
+                    <span className="text-white text-xs">QR CODE</span>
                   </div>
-                  <div className="mt-2 text-gray-600">
-                    <div className="font-medium">{order.customer}</div>
-                    <div className="text-sm">
-                      {order.knives} knives • {order.service} • {order.date}
+                </div>
+                
+                <div className="space-y-1 text-sm">
+                  <div className="font-bold text-blue-600">Sharp Edge Pro</div>
+                  <div className="font-semibold">{order.customer}</div>
+                  <div className="text-gray-600">Order: {order.id}</div>
+                  <div className="text-gray-600">{order.knives} Knives</div>
+                  <div className="text-gray-600">{order.service}</div>
+                  <div className="text-xs text-gray-500 mt-2">Scan to Confirm Pickup</div>
+                  <div className="text-xs text-gray-400">{qrData.qrId}</div>
+                </div>
+              </div>
+
+              {/* Pickup URL */}
+              <div className="mt-4 p-3 bg-gray-50 rounded text-xs">
+                <div className="font-medium text-gray-700 mb-1">Pickup URL:</div>
+                <div className="text-gray-600 break-all">{qrData.pickupUrl}</div>
+              </div>
+
+              {/* Print Instructions */}
+              <div className="mt-4 p-3 bg-blue-50 rounded text-sm">
+                <div className="font-medium text-blue-800 mb-2">📱 How to Use:</div>
+                <ol className="text-blue-700 space-y-1 text-xs list-decimal list-inside">
+                  <li>Print this QR label on your mini printer</li>
+                  <li>Attach label to knife bundle/bag</li>
+                  <li>Customer scans QR when picking up</li>
+                  <li>Order automatically marked as picked up</li>
+                </ol>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-6 flex space-x-3">
+                <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+                  <Download size={16} />
+                  <span>Print Label</span>
+                </button>
+                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  Copy URL
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
+          <div className="mt-4 sm:mt-0 flex space-x-3">
+            <button className="bg-white border border-gray-300 px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-50">
+              <Filter size={20} />
+              <span>Filter</span>
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+              <Plus size={20} />
+              <span>New Order</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Search bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder="Search orders..."
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        {/* Workflow Stage Tabs */}
+        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg overflow-x-auto">
+          {['All', 'Receiving', 'Inspection', 'Sharpening', 'Finishing', 'Ready for Pickup'].map((stage) => (
+            <button
+              key={stage}
+              className="px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap bg-white text-gray-700 hover:bg-gray-50"
+            >
+              {stage}
+            </button>
+          ))}
+        </div>
+
+        {/* Orders List with QR Code Generation */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="divide-y">
+            {orders.map((order) => (
+              <div key={order.id} className="p-6 hover:bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3">
+                      <div className="font-semibold text-lg">{order.id}</div>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                        {order.status}
+                      </span>
+                      {order.priority === 'high' && (
+                        <AlertCircle className="text-red-600" size={18} />
+                      )}
+                    </div>
+                    <div className="mt-2 text-gray-600">
+                      <div className="font-medium">{order.customer}</div>
+                      <div className="text-sm">
+                        {order.knives} knives • {order.service} • {order.date}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="text-right">
+                      <div className="font-bold text-lg">${order.total}</div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <Eye size={18} />
+                      </button>
+                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <Edit size={18} />
+                      </button>
+                      <button 
+                        onClick={() => setShowQRModal(order)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                        title="Generate QR Pickup Label"
+                      >
+                        <Camera size={18} />
+                      </button>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <div className="text-right">
-                    <div className="font-bold text-lg">${order.total}</div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                      <Eye size={18} />
-                    </button>
-                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                      <Edit size={18} />
-                    </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* QR Code Modal */}
+        {showQRModal && <QRCodeModal order={showQRModal} />}
+
+        {/* Pickup History */}
+        <div className="bg-white rounded-lg shadow-sm border">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold">Recent Pickup Confirmations</h3>
+          </div>
+          <div className="divide-y">
+            {pickupHistory.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                <CheckCircle size={48} className="mx-auto mb-3 text-gray-300" />
+                <p>No pickup confirmations yet</p>
+                <p className="text-sm">Customers will confirm pickup by scanning QR codes</p>
+              </div>
+            ) : (
+              pickupHistory.map((pickup) => (
+                <div key={pickup.id} className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="text-green-600" size={20} />
+                      </div>
+                      <div>
+                        <div className="font-medium">{pickup.customer}</div>
+                        <div className="text-sm text-gray-600">Order: {pickup.orderId}</div>
+                        <div className="text-xs text-gray-500">Via {pickup.method} at {pickup.location}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-green-600">Picked Up</div>
+                      <div className="text-xs text-gray-500">{pickup.confirmedAt}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   const CustomersView = () => (
     <div className="space-y-6">
@@ -1297,6 +2214,10 @@ export default function EdgeSuitePro() {
         return <OrdersView />
       case 'customers':
         return <CustomersView />
+      case 'photos':
+        return <PhotosView />
+      case 'marketing':
+        return <MarketingView />
       case 'loyalty':
         return <LoyaltyView />
       case 'payments':
