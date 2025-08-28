@@ -34,10 +34,7 @@ import {
 export default function EdgeSuitePro() {
   const [currentView, setCurrentView] = useState('dashboard')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(new Date())
-  const [currentDate, setCurrentDate] = useState(new Date())
   const [showQRModal, setShowQRModal] = useState(null)
-  const [selectedSession, setSelectedSession] = useState(null)
   
   const currentUser = {
     name: 'John Smith',
@@ -103,167 +100,16 @@ export default function EdgeSuitePro() {
     }
   ]
 
-  // Sample appointments data
-  const appointments = [
-    {
-      id: 'APT-001',
-      customer: 'Mario Rodriguez',
-      service: 'Standard Sharpening',
-      date: '2024-08-22',
-      time: '10:00 AM',
-      duration: 30,
-      status: 'confirmed',
-      notes: '3 kitchen knives',
-      phone: '(555) 123-4567'
-    },
-    {
-      id: 'APT-002',
-      customer: 'Sarah Chen',
-      service: 'Premium Package',
-      date: '2024-08-22',
-      time: '2:00 PM',
-      duration: 60,
-      status: 'confirmed',
-      notes: 'Restaurant chef - 5 knives + repair',
-      phone: '(555) 987-6543'
-    },
-    {
-      id: 'APT-003',
-      customer: 'Mike Thompson',
-      service: 'Consultation',
-      date: '2024-08-23',
-      time: '9:00 AM',
-      duration: 15,
-      status: 'pending',
-      notes: 'First time customer',
-      phone: '(555) 456-7890'
-    }
-  ]
-
-  // Sample invoices data
-  const invoices = [
-    {
-      id: 'INV-001',
-      orderId: 'ORD-001',
-      customer: 'Mario Rodriguez',
-      amount: 45.00,
-      status: 'paid',
-      dueDate: '2024-08-22',
-      paidDate: '2024-08-20',
-      services: [
-        { name: 'Standard Sharpening', quantity: 3, rate: 15.00, total: 45.00 }
-      ]
-    },
-    {
-      id: 'INV-002',
-      orderId: 'ORD-002',
-      customer: 'Sarah Chen',
-      amount: 85.00,
-      status: 'pending',
-      dueDate: '2024-08-25',
-      paidDate: null,
-      services: [
-        { name: 'Premium Sharpening', quantity: 5, rate: 12.00, total: 60.00 },
-        { name: 'Handle Repair', quantity: 1, rate: 25.00, total: 25.00 }
-      ]
-    }
-  ]
-
-  // Sample payment methods
-  const paymentMethods = [
-    {
-      id: 'PM-001',
-      type: 'Credit Card',
-      details: '**** 4242',
-      customer: 'Mario Rodriguez',
-      amount: 45.00,
-      date: '2024-08-20',
-      status: 'completed'
-    }
-  ]
-
-  // Sample loyalty data
-  const loyaltyStats = {
-    totalMembers: 1247,
-    activeMembers: 892,
-    pointsIssued: 45230,
-    rewardsRedeemed: 156,
-    avgPointsPerCustomer: 385
-  }
-
-  const loyaltyTiers = [
-    {
-      name: 'Bronze',
-      minPoints: 0,
-      benefits: ['5% discount', 'Birthday reward', 'Priority booking'],
-      members: 654,
-      color: 'text-orange-600 bg-orange-100'
-    },
-    {
-      name: 'Silver',
-      minPoints: 500,
-      benefits: ['10% discount', 'Free sharpening every 10th visit', 'Express service'],
-      members: 425,
-      color: 'text-gray-600 bg-gray-100'
-    },
-    {
-      name: 'Gold',
-      minPoints: 1000,
-      benefits: ['15% discount', 'Free pickup/delivery', 'VIP support', 'Exclusive offers'],
-      members: 168,
-      color: 'text-yellow-600 bg-yellow-100'
-    }
-  ]
-
-  // Sample marketing data
-  const campaigns = [
-    {
-      id: 'CAMP-001',
-      name: 'Summer Sharpening Special',
-      type: 'promotional',
-      status: 'active',
-      segment: 'Home Cooks',
-      sent: 342,
-      opened: 189,
-      clicked: 45,
-      conversions: 12,
-      startDate: '2024-08-15',
-      endDate: '2024-08-31'
-    }
-  ]
-
-  const segments = [
-    {
-      name: 'Home Cooks',
-      count: 654,
-      engagement: 68,
-      avgOrderValue: 45,
-      description: 'Individual customers who cook at home'
-    },
-    {
-      name: 'Restaurant Chefs',
-      count: 187,
-      engagement: 82,
-      avgOrderValue: 125,
-      description: 'Professional chefs and restaurant staff'
-    }
-  ]
-
-  // Enhanced pickup confirmations
   const pickupHistory = [
     {
       id: 'PICKUP-001',
       orderId: 'ORD-001',
-      qrId: 'QR-ORD-001-MARIORODRIGUEZ',
       customer: 'Mario Rodriguez',
       confirmedAt: '2024-08-22 3:15 PM',
       method: 'QR Code Scan',
-      photoConfirmation: true,
       customerRating: 5,
       feedback: 'Knives are incredibly sharp! Thank you!',
-      loyaltyPointsAdded: 45,
-      nextServicePrompted: true,
-      socialShared: true
+      loyaltyPointsAdded: 45
     }
   ]
 
@@ -294,45 +140,10 @@ export default function EdgeSuitePro() {
     return colors[status] || 'bg-gray-100 text-gray-800'
   }
 
-  const getAppointmentColor = (status) => {
-    const colors = {
-      confirmed: 'bg-green-100 border-green-500 text-green-800',
-      pending: 'bg-yellow-100 border-yellow-500 text-yellow-800',
-      completed: 'bg-blue-100 border-blue-500 text-blue-800',
-      cancelled: 'bg-red-100 border-red-500 text-red-800'
-    }
-    return colors[status] || 'bg-gray-100 border-gray-500 text-gray-800'
-  }
-
-  const getInvoiceStatusColor = (status) => {
-    const colors = {
-      paid: 'bg-green-100 text-green-800',
-      pending: 'bg-yellow-100 text-yellow-800',
-      overdue: 'bg-red-100 text-red-800',
-      draft: 'bg-gray-100 text-gray-800'
-    }
-    return colors[status] || 'bg-gray-100 text-gray-800'
-  }
-
-  const generateQRCode = (orderId, customerId, customerName) => {
+  const generateQRCode = (orderId, customerName) => {
     const qrId = `QR-${orderId}-${customerName.replace(/\s+/g, '').toUpperCase()}`
     const pickupUrl = `https://edge-suite-pro.vercel.app/pickup/${qrId}`
-    return {
-      qrId,
-      pickupUrl,
-      printData: {
-        businessName: 'Sharp Edge Pro',
-        customerName,
-        orderId,
-        qrId,
-        pickupUrl
-      }
-    }
-  }
-
-  const getAppointmentsForDate = (date) => {
-    const dateStr = date.toISOString().split('T')[0]
-    return appointments.filter(apt => apt.date === dateStr)
+    return { qrId, pickupUrl }
   }
 
   const toggleMobileMenu = () => {
@@ -434,160 +245,157 @@ export default function EdgeSuitePro() {
     </div>
   )
 
-  const OrdersView = () => {
-    const QRCodeModal = ({ order }) => {
-      const qrData = generateQRCode(order.id, order.customer.replace(/\s+/g, ''), order.customer)
-      
-      return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full">
-            <div className="p-6 border-b flex justify-between items-center">
-              <h3 className="text-lg font-semibold">QR Pickup Label</h3>
-              <button 
-                onClick={() => setShowQRModal(null)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <X size={20} />
+  const QRCodeModal = ({ order }) => {
+    const qrData = generateQRCode(order.id, order.customer)
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg max-w-md w-full">
+          <div className="p-6 border-b flex justify-between items-center">
+            <h3 className="text-lg font-semibold">QR Pickup Label</h3>
+            <button 
+              onClick={() => setShowQRModal(null)}
+              className="p-2 hover:bg-gray-100 rounded-lg"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div className="p-6">
+            <div className="border-2 border-dashed border-gray-300 p-6 text-center bg-white shadow-sm">
+              <div className="mb-4">
+                <div className="w-24 h-24 bg-black mx-auto mb-2 flex items-center justify-center">
+                  <span className="text-white text-xs">QR CODE</span>
+                </div>
+              </div>
+              
+              <div className="space-y-1 text-sm">
+                <div className="font-bold text-blue-600">Sharp Edge Pro</div>
+                <div className="font-semibold">{order.customer}</div>
+                <div className="text-gray-600">Order: {order.id}</div>
+                <div className="text-gray-600">{order.knives} Knives</div>
+                <div className="text-gray-600">{order.service}</div>
+                <div className="text-xs text-gray-500 mt-2">Scan to Confirm Pickup</div>
+                <div className="text-xs text-gray-400">{qrData.qrId}</div>
+              </div>
+            </div>
+
+            <div className="mt-4 p-3 bg-blue-50 rounded text-sm">
+              <div className="font-medium text-blue-800 mb-2">📱 Customer Experience:</div>
+              <ul className="text-blue-700 space-y-1 text-xs list-disc list-inside">
+                <li>Photo confirmation of pickup</li>
+                <li>Instant 5-star rating request</li>
+                <li>Automatic loyalty points</li>
+                <li>Next service booking prompt</li>
+              </ul>
+            </div>
+
+            <div className="mt-6 flex space-x-3">
+              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+                <Download size={16} />
+                <span>Print Label</span>
+              </button>
+              <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                Copy URL
               </button>
             </div>
-            
-            <div className="p-6">
-              <div className="border-2 border-dashed border-gray-300 p-6 text-center bg-white shadow-sm">
-                <div className="mb-4">
-                  <div className="w-24 h-24 bg-black mx-auto mb-2 flex items-center justify-center">
-                    <span className="text-white text-xs">QR CODE</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-1 text-sm">
-                  <div className="font-bold text-blue-600">Sharp Edge Pro</div>
-                  <div className="font-semibold">{order.customer}</div>
-                  <div className="text-gray-600">Order: {order.id}</div>
-                  <div className="text-gray-600">{order.knives} Knives</div>
-                  <div className="text-gray-600">{order.service}</div>
-                  <div className="text-xs text-gray-500 mt-2">Scan to Confirm Pickup</div>
-                  <div className="text-xs text-gray-400">{qrData.qrId}</div>
-                </div>
-              </div>
-
-              <div className="mt-6 flex space-x-3">
-                <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
-                  <Download size={16} />
-                  <span>Print Label</span>
-                </button>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                  Copy URL
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
-          <div className="mt-4 sm:mt-0 flex space-x-3">
-            <button className="bg-white border border-gray-300 px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-50">
-              <Filter size={20} />
-              <span>Filter</span>
-            </button>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-              <Plus size={20} />
-              <span>New Order</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm border">
-          <div className="divide-y">
-            {orders.map((order) => (
-              <div key={order.id} className="p-6 hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3">
-                      <div className="font-semibold text-lg">{order.id}</div>
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
-                      {order.priority === 'high' && (
-                        <AlertCircle className="text-red-600" size={18} />
-                      )}
-                    </div>
-                    <div className="mt-2 text-gray-600">
-                      <div className="font-medium">{order.customer}</div>
-                      <div className="text-sm">
-                        {order.knives} knives • {order.service} • {order.date}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-right">
-                      <div className="font-bold text-lg">${order.total}</div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                        <Eye size={18} />
-                      </button>
-                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                        <Edit size={18} />
-                      </button>
-                      <button 
-                        onClick={() => setShowQRModal(order)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                        title="Generate QR Pickup Label"
-                      >
-                        <Camera size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {showQRModal && <QRCodeModal order={showQRModal} />}
-
-        <div className="bg-white rounded-lg shadow-sm border">
-          <div className="p-6 border-b">
-            <h3 className="text-lg font-semibold">Recent Pickup Confirmations</h3>
-          </div>
-          <div className="divide-y">
-            {pickupHistory.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">
-                <CheckCircle size={48} className="mx-auto mb-3 text-gray-300" />
-                <p>No pickup confirmations yet</p>
-              </div>
-            ) : (
-              pickupHistory.map((pickup) => (
-                <div key={pickup.id} className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                        <CheckCircle className="text-green-600" size={20} />
-                      </div>
-                      <div>
-                        <div className="font-medium">{pickup.customer}</div>
-                        <div className="text-sm text-gray-600">Rating: {pickup.customerRating}/5 ⭐</div>
-                        <div className="text-xs text-gray-500">"{pickup.feedback}"</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-green-600">Picked Up</div>
-                      <div className="text-xs text-gray-500">{pickup.confirmedAt}</div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
           </div>
         </div>
       </div>
     )
   }
+
+  const OrdersView = () => (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
+        <div className="mt-4 sm:mt-0 flex space-x-3">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+            <Plus size={20} />
+            <span>New Order</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="divide-y">
+          {orders.map((order) => (
+            <div key={order.id} className="p-6 hover:bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-3">
+                    <div className="font-semibold text-lg">{order.id}</div>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                    {order.priority === 'high' && (
+                      <AlertCircle className="text-red-600" size={18} />
+                    )}
+                  </div>
+                  <div className="mt-2 text-gray-600">
+                    <div className="font-medium">{order.customer}</div>
+                    <div className="text-sm">
+                      {order.knives} knives • {order.service} • {order.date}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="text-right">
+                    <div className="font-bold text-lg">${order.total}</div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                      <Eye size={18} />
+                    </button>
+                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                      <Edit size={18} />
+                    </button>
+                    <button 
+                      onClick={() => setShowQRModal(order)}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                      title="Generate QR Pickup Label"
+                    >
+                      <Camera size={18} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pickup History */}
+      <div className="bg-white rounded-lg shadow-sm border">
+        <div className="p-6 border-b">
+          <h3 className="text-lg font-semibold">Recent Pickup Confirmations</h3>
+        </div>
+        <div className="divide-y">
+          {pickupHistory.map((pickup) => (
+            <div key={pickup.id} className="p-6 bg-gradient-to-r from-green-50 to-blue-50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircle className="text-green-600" size={24} />
+                  </div>
+                  <div>
+                    <div className="font-medium text-lg">{pickup.customer}</div>
+                    <div className="text-sm text-gray-600">Rating: {pickup.customerRating}/5 ⭐</div>
+                    <div className="text-xs text-gray-500">"{pickup.feedback}"</div>
+                    <div className="text-xs text-blue-600">+{pickup.loyaltyPointsAdded} loyalty points added</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-green-600">Completed</div>
+                  <div className="text-xs text-gray-500">{pickup.confirmedAt}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 
   const CustomersView = () => (
     <div className="space-y-6">
@@ -630,6 +438,10 @@ export default function EdgeSuitePro() {
                   <div className="text-center">
                     <div className="text-sm text-gray-600">Points</div>
                     <div className="font-semibold">{customer.points}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600">Orders</div>
+                    <div className="font-semibold">{customer.totalOrders}</div>
                   </div>
                 </div>
               </div>
@@ -715,6 +527,7 @@ export default function EdgeSuitePro() {
             <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
               <div className="flex items-center flex-shrink-0 px-4">
                 <Scissors className="w-8 h-8 text-blue-600" />
+                <div className="ml-3">
                   <h1 className="text-lg font-semibold text-gray-900">Edge Suite Pro</h1>
                   <p className="text-xs text-gray-500">{currentUser.business}</p>
                 </div>
@@ -785,6 +598,7 @@ export default function EdgeSuitePro() {
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               {renderCurrentView()}
+              {showQRModal && <QRCodeModal order={showQRModal} />}
             </div>
           </div>
         </main>
