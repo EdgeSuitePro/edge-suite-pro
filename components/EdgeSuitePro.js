@@ -33,11 +33,15 @@ export default function EdgeSuitePro() {
     { id: 'settings', label: 'Settings', icon: Settings }
   ]
 
+  // FIXED:
   const getStatusColor = (status) => {
-    if (status === 'Receiving') return 'bg-blue-100 text-blue-800'
-    if (status === 'Sharpening') return 'bg-orange-100 text-orange-800'
-    if (status === 'Finishing') return 'bg-purple-100 text-purple-800'
-    return 'bg-gray-100 text-gray-800'
+    const colors = {
+      active: 'bg-green-100 text-green-800',
+      pending: 'bg-yellow-100 text-yellow-800',
+      overdue: 'bg-red-100 text-red-800',
+      draft: 'bg-gray-100 text-gray-800'
+    }
+    return colors[status] || 'bg-gray-100 text-gray-800'
   }
 
   const DashboardView = () => (
